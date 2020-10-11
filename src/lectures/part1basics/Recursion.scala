@@ -20,9 +20,18 @@ object Recursion extends App {
   }
 
   //println(anotherFact(5000)) // this will give us
+  @tailrec
   def concatStringNTimes(n: Int, input: String, accumulator: StringBuilder): String =
-    if (n <= 1) accumulator.toString()
+    if (n <= 0) accumulator.toString()
     else concatStringNTimes(n - 1, input, accumulator.append(input))
 
-  println(concatStringNTimes(5, "n", new StringBuilder("n") ))
+  println(concatStringNTimes(5, "n", new StringBuilder("")))
+
+  @tailrec
+  def tailRecFibonacci(n: Int, incrementer: Int, last: Int, nextToLast: Int): Int = {
+    if (incrementer >= n) last
+    else tailRecFibonacci(n, incrementer + 1, nextToLast + last, last)
+  }
+
+  println(tailRecFibonacci(7, 2, 1, 1)) // 1(last) 1(nextToLast) 2(i) 3 5 8 13 --> to get to 13, it will run n - 2 or 7 -2 = 5 times
 }
