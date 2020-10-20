@@ -1,15 +1,22 @@
 package playground
 
-fun main(){
+fun main() {
     val head: Node = Node(1)
     val list: LinkedListImpl = LinkedListImpl(head)
     list.insertAtEnd(2)
     list.insertAtEnd(3)
-    list.insertAtEnd(3)
     list.insertAtEnd(4)
     list.insertAtEnd(5)
-    list.print()
+    list.insertAtEnd(6)
+    list.insertAt(4, 22)
+    list.insertAtStart(0)
+    list.print() //Before Deleting: 0 ===> 1 ===> 2 ===> 3 ===> 4 ===> 22 ===> 5 ===> 6 ===> null
+    list.delete(4)
+    list.print() //After deleting: 1 ===> 2 ===> 3 ===> 4 ===> 22 ===> 5 ===> 6 ===> null
+    println(list.size())
+
 }
+
 class Node(val data: Int, var next: Node? = null)
 
 class LinkedListImpl(private var head: Node? = null) : LinkedList {
@@ -27,15 +34,43 @@ class LinkedListImpl(private var head: Node? = null) : LinkedList {
     }
 
     override fun insertAt(index: Int, n: Int): Unit {
-        TODO("Not yet implemented")
+        val newNodeAtDesiredIndex = Node(n)
+        var current = head
+        var temp: Node? = null
+        var iterationTotal = 0
+        while (iterationTotal != index - 1) {
+            current = current?.next
+            iterationTotal++
+        }
+        temp = current?.next
+        current?.next = newNodeAtDesiredIndex
+        current?.next?.next = temp
     }
 
     override fun insertAtStart(n: Int): Unit {
-        TODO("Not yet implemented")
+//        val newNodeAtStart = Node(n)
+//        val temp = head
+//        head = newNodeAtStart
+//        head?.next = temp
+        //another way
+        val newNodeAtStart = Node(n)
+        newNodeAtStart.next = head
+        head = newNodeAtStart
     }
 
     override fun delete(index: Int): Unit {
-        TODO("Not yet implemented")
+        if (index == 0) {
+            head = head?.next
+        } else {
+            var iterationTotal = 0
+            var current = head
+            while (iterationTotal != index - 1) {
+                current = current?.next
+                iterationTotal++
+            }
+            val temp = current
+            temp?.next = current?.next?.next
+        }
     }
 
     override fun print(): Unit {
@@ -47,8 +82,18 @@ class LinkedListImpl(private var head: Node? = null) : LinkedList {
         println("${current?.data} ===> null")
     }
 
-    override fun size(): Int {
-        TODO("Not yet implemented")
+    override fun size(): Int = when (head) {
+        null -> 0
+        else -> {
+            var length = 0
+            var current = head
+            while (current?.next != null) {
+                current = current.next
+                length++
+            }
+            length++
+            length
+        }
     }
 }
 
